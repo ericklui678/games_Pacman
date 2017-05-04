@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Pacman Demo</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="container">
+            <div id="world"></div>
+            <div id="pacman"></div>
+            <div id="score"></div>
+        </div>
+
+        <script>
+
+        var world = [
+            [2,2,2,2,2,2,2,2,2,2],
+            [2,1,1,1,1,1,1,1,1,2],
+            [2,1,1,1,1,1,1,1,1,2],
+            [2,1,1,1,1,1,1,1,1,2],
+            [2,1,1,1,1,1,1,1,1,2],
+            [2,1,1,1,1,1,1,1,1,2],
+            [2,1,1,1,1,1,1,1,1,2],
+            [2,1,1,1,1,1,1,1,1,2],
+            [2,1,1,1,1,1,1,1,1,2],
+            [2,2,2,2,2,2,2,2,2,2],
+        ];
+
+        var pacman = {
+            x: 1,
+            y: 1
+        };
+        var score = 0;
+
+        function displayWorld(){
+            var output = '';
+
+            for(var i = 0; i < world.length; i++){
+                output += "<div class='row'>";
+                for(var j = 0; j < world[i].length; j++){
+                    if(world[i][j] == 2)
+                        output += "<div class='brick'></div>";
+                    else if(world[i][j] == 1)
+                        output += "<div class='coin'></div>";
+                    if(world[i][j] == 0)
+                    output += "<div class='empty'></div>";
+                }
+                output += "</div>";
+            }
+            document.getElementById('world').innerHTML = output;
+
+        }
+        function displayPacman(){
+            document.getElementById('pacman').style.top = pacman.y*20+"px";
+            document.getElementById('pacman').style.left = pacman.x*20+"px";
+        }
+        function displayScore(){
+            document.getElementById('score').innerHTML = score;
+        }
+
+        displayWorld();
+        displayPacman();
+
+        document.onkeydown = function(e){
+            if(e.keyCode == 37 && world[pacman.y][pacman.x-1] != 2){    // when left arrow is pressed
+                pacman.x--;
+                document.getElementById('pacman').style.transform = "rotate(-90deg)";
+            }
+            else if(e.keyCode == 39 && world[pacman.y][pacman.x+1] != 2){   // when right arrow is pressed
+                pacman.x++;
+                document.getElementById('pacman').style.transform = "rotate(90deg)";
+            }
+            else if(e.keyCode == 38 && world[pacman.y-1][pacman.x] != 2){  // when up arrow is pressed
+                pacman.y--;
+                document.getElementById('pacman').style.transform = "rotate(0deg)";
+            }
+            else if(e.keyCode == 40 && world[pacman.y][pacman.y+1] != 2){
+                pacman.y++;
+                document.getElementById('pacman').style.transform = "rotate(180deg)";
+            }
+
+            // coin detection
+            if(world[pacman.y][pacman.x] == 1){     // if pacman's position is coin
+                world[pacman.y][pacman.x] = 0;  // change coin to empty
+                score += 10;
+            }
+            displayWorld();     // update world display
+            displayPacman();    // update pacman display
+            displayScore();     // update score display
+        }
+
+        </script>
+    </body>
+</html>
